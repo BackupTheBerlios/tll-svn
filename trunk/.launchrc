@@ -1,0 +1,181 @@
+[2XP]
+filename = c:\apps\2xExplorer\2xExplorer.exe
+
+[ADP60]
+filename = c:\ADP60Tools\bin\shell.bat
+
+[BASH]
+filename = d:\mikit\cygwin.bat
+
+[CHESS]
+filename = C:\apps\arena\Arena.exe
+
+[DIFF]
+filename = c:\apps\KDiff3\kdiff3.exe
+
+[EXCEL]
+filename = C:\Program Files\Microsoft Office\Office10\EXCEL.EXE
+
+[FTP]
+filename = C:\apps\FileZilla\filezilla.exe
+
+[GAIM]
+filename = C:\apps\Gaim\gaim.exe
+
+[GIMP]
+filename = C:\apps\GIMP\bin\gimp-2.0.exe
+
+[HOME]
+filename = d:\mikit
+
+[ICQ]
+filename = C:\apps\ICQLite\ICQLite.exe
+
+[IDLE]
+filename = C:\apps\Python23\pythonw.exe
+arguments = C:\apps\Python23\Lib\idlelib\idle.pyw
+
+[IE]
+filename = iexplore
+
+[INNOHELP]
+filename = c:\apps\InnoSetup\ISetup.hlp
+
+[IPY]
+filename = d:\mikit\ipy.bat
+
+[IVIEW]
+filename = C:\apps\IrfanView\i_view32.exe
+
+[MSDN]
+filename = C:\Windows\hh.exe
+arguments = "C:\Program Files\Microsoft Visual Studio\MSDN\2001OCT\1033\MSDN130.COL"
+
+[MSYS]
+filename = C:\apps\msys\1.0\msys.bat
+directory = C:\apps\msys\1.0\bin
+
+[MUSIC]
+filename = c:\apps\stp\STP.exe
+
+[MZ]
+filename = c:\apps\MzScheme\MzScheme.exe
+
+[OOO]
+filename = C:\apps\OpenOffice\program\soffice.exe
+
+[OUTLOOK]
+filename = C:\Program Files\Microsoft Office\Office10\OUTLOOK.EXE
+
+[P4V]
+filename = c:\apps\Perforce\p4v.exe
+
+[PDF]
+filename = c:\Program Files\Adobe\Acrobat 6.0\Reader\AcroRd32.exe
+
+[PERFORCE]
+filename = c:\apps\Perforce\P4Win.exe
+
+[PEXP]
+filename = c:\apps\ProcessExplorer\procexp.exe
+
+[PHONE]
+filename = C:\apps\Skype\Phone\Skype.exe
+
+[PPT]
+filename = C:\Program Files\Microsoft Office\Office10\POWERPNT.EXE
+
+[PUI]
+filename = http://199.203.65.50/punch?sid=3000&user_id=1678&inout=1 
+
+[PUO]
+filename = http://199.203.65.50/punch?sid=3000&user_id=1678&inout=2
+
+[PYHELP]
+filename = C:\apps\Python24\Doc\Python24.chm
+
+[PYWIN32]
+filename = C:\apps\Python23\Lib\site-packages\PyWin32.chm
+
+[REBOOT]
+filename = c:\cygwin\bin\shutdown.exe
+arguments = -r now
+
+[REMOTE]
+filename = mstsc
+
+[SCONSHELP]
+filename = C:\apps\scons\scons-user.pdf
+
+[SEARCH]
+filename = http://127.0.0.1:4664/&s=3186225757
+
+[SLEEP]
+filename = c:\cygwin\bin\shutdown.exe
+arguments = -h now
+
+[SQUEAK]
+filename = c:\apps\Squeak\Squeak.exe
+
+[SSADMIN]
+filename = \\zfs1\projects\apps\vss\vss 6.0\win32\SSADMIN.EXE
+
+[STORY]
+filename = d:\mikit\sipur\colors.sxw
+
+[TELNET]
+filename = C:\apps\putty.exe
+arguments = -telnet 
+
+[THESIS]
+filename = d:\mikit\uni\paper\thesis.sxw
+
+[TIMESHEET]
+filename = http://webtime/ws-daily.adp
+
+[TKINTER]
+filename = d:\mikit\eBooks\www.pythonware.com\library\tkinter\introduction\index.htm
+
+[TMP]
+filename = \\zfs1\public\temp\miki
+
+[TODO]
+filename = c:\apps\todo\ToDoList.exe
+
+[TP]
+filename = c:\apps\TuxPaint\TuxPaint.exe
+
+[VC]
+filename = C:\Program Files\Microsoft Visual Studio\Common\MSDev98\Bin\MSDEV.EXE
+
+[VIM]
+filename = C:\apps\Vim\vim63\gvim.exe
+
+[VLC]
+filename = c:\apps\VideoLAN\VLC\vlc.exe
+
+[VNC]
+filename = C:\apps\RealVNC\VNC4\vncviewer.exe
+
+[VSS]
+filename = C:\Program Files\Microsoft Visual Studio\VSS\win32\SSEXP.EXE
+
+[WM]
+filename = D:\mikit\wm\wm.pyw
+
+[WORD]
+filename = c:\Program Files\Microsoft Office\Office10\WINWORD.EXE
+
+[WWW]
+filename = C:\apps\MozillaFireFox\firefox.exe
+
+[WXDEMO]
+filename = c:\apps\python23\pythonw.exe
+arguments = C:\apps\wxPython2.5_Docs_and_Demos\demo\demo.pyw
+directory = C:\apps\wxPython2.5_Docs_and_Demos\demo
+
+[WXHELP]
+filename = C:\apps\wxPython2.5_Docs_and_Demos\docs\wx.chm
+
+[XWIN]
+filename = c:\cygwin\usr\X11R6\bin\startxwin.bat

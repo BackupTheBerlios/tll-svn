@@ -1,0 +1,49 @@
+#!/usr/bin/env python
+'''Convert SlickRun configuraion file to lauch configuration file'''
+
+# =====================================================
+# Copyright (c) Miki Tebeka <miki.tebeka@zoran.com> 
+# This file is under the GNU Public License (GPL), see
+# http://www.gnu.org/copyleft/gpl.html for more details
+# =====================================================
+
+__author__ = "Miki Tebeka <miki.tebeka@zoran.com>"
+# $Id$
+
+from os.path import isfile
+from optparse import OptionParser
+from sys import stdout
+
+p = OptionParser("usage: %prog INFILE [OUTFILE]")
+opts, args = p.parse_args()
+if len(args) not in (1, 2):
+    p.error("wrong number of arguments") # Will exit
+
+infile = args[0]
+if not isfile(infile):
+    raise SystemExit("%s: no such file" % infile)
+try:
+    info = open(infile, "rt")
+except IOError:
+    raise SystemExit("can't open %s for reading" % infile)
+
+if len(args) == 1 or args[1] == "-":
+    outfo = stdout
+else:
+    try:
+        outfo = open(args[1], "wt")
+    except IOError:
+        raise SystemExit("can't open %s for writing" % args[1])
+
+for line in info:
+    line = line.strip()
+    if line.startswith("["):
+        print >> outfo, line
+    if line.startswith("Filename"):
+        cmd = line.split("=", 1)[1]
+        print >> outfo, "filename = %s" % cmd.replace("\"", "")
+    if line.startswith("Params"):
+        args = line.split("=", 1)[1]
+        args = args.replace("\"", "")
+        if args:
+            print >> outfo, "arguments = %s" % args.replace("\"", "")
