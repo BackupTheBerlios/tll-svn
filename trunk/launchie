@@ -1,0 +1,139 @@
+#!/usr/bin/env python
+'''Simple lanucher'''
+
+__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+__version__ = "0.1.0"
+
+from Tkinter import Tk, Label, Entry
+from tkFont import Font
+from tkMessageBox import showerror
+
+from os.path import exists, expanduser, join, isfile
+from os import environ, popen, stat, system
+from stat import S_IEXEC
+from string import strip
+
+def load_aliases():
+    env_key = "LAUNCHIERC"
+    rcfile = ""
+    
+    if env_key in environ:
+        rcfile = environ[env_key]
+    elif "HOME" in environ:
+        rcfile = join(environ["HOME"], ".launchierc")
+
+    if (not rcfile) or (not isfile(rcfile)):
+        return {}
+
+    aliases = {}
+    for line in open(rcfile):
+        line = line.strip()
+        if (not line) or (line[0] == "#"):
+            continue
+        alias, target = map(strip, line.split("=", 1))
+
+        aliases[alias] = target
+
+    return aliases
+
+def is_executable(path):
+    if not isfile(path):
+        return 0
+
+    return S_IEXEC & stat(path).st_mode
+
+
+def launch(name, args, aliases):
+    fullname = aliases.get(name, name)
+
+    fullname = expanduser(fullname)
+    if not exists(fullname):
+        fullname = popen("which %s 2>/dev/null" % fullname).read().strip()
+        if not fullname:
+            raise ValueError("can't find %s" % name)
+
+    if is_executable(fullname):
+        system("\"%s\" %s&" % (fullname, args))
+    else:
+        system("start \"%s\"" % fullname)
+
+
+USER_CANCEL = 0
+ROOT = None
+COMMAND = None
+
+def quit(event):
+    global USER_CANCEL
+
+    USER_CANCEL = 1
+    ROOT.quit()
+
+def build_ui():
+    global ROOT, COMMAND
+
+    ROOT = Tk()
+    ROOT.title("Launchie")
+    ROOT.bind("<Escape>", quit)
+    font = Font(family="Courier", size=40, weight="bold")
+    COMMAND = Entry(width=20, font=font)
+    COMMAND.pack()
+    COMMAND.bind("<Return>", lambda e: ROOT.quit())
+
+def show_ui():
+    global USER_CANCEL
+
+    USER_CANCEL = 0
+    COMMAND.focus()
+    ROOT.mainloop()
+
+    return COMMAND.get().strip()
+
+def set_user_path():
+    if "HOME" not in environ:
+        return
+
+    new_path = "%s:%s" % (join(environ["HOME"], "bin"), environ["PATH"])
+    environ["PATH"] = new_path
+
+
+def main(argv=None):
+    if argv is None:
+        import sys
+        argv = sys.argv
+
+    from optparse import OptionParser
+
+    parser = OptionParser(usage="usage: %prog", 
+            version="launchie %s" % __version__)
+
+    opts, args = parser.parse_args(argv[1:])
+    if len(args) != 0:
+        parser.error("wrong number of arguments") # Will exit
+
+
+    aliases = load_aliases()
+    set_user_path()
+    build_ui()
+
+    while 1:
+        try:
+            command = show_ui()
+            if USER_CANCEL:
+                raise SystemExit
+
+            if not command:
+                showerror("Launchie Error", "Please enter *something*")
+                continue
+
+            if " " in command:
+                command, args = command.split(" ", 1)
+            else:
+                args = ""
+            launch(command, args, aliases)
+            break
+        except ValueError:
+            showerror("Lanuchie Error", "Can't launch %s" % command)
+
+if __name__ == "__main__":
+    main()
+
