@@ -1,11 +1,10 @@
 ===============================
-"launchie" version 0.1.0 README
+"launchie" version 0.1.1 README
 ===============================
 :Author: Miki Tebeka <miki.tebeka@gmail.com>
 :Data: $Date$
 
 .. contents::
-
 
 What is "lanuchie"
 ==================
@@ -33,7 +32,6 @@ Configuration File
     term = Terminal
     oo = soffice
     im = pidgin
-
 
 Downloading etc
 ===============

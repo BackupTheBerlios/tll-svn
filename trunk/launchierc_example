@@ -1,7 +1,7 @@
 # Launchie Aliases
 
 www = firefox
-mail = thunderbird
+mail = Terminal -x mutt
 term = Terminal
 oo = soffice
 im = pidgin

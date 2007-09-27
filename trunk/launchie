@@ -2,7 +2,7 @@
 '''Simple lanucher'''
 
 __author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 from Tkinter import Tk, Label, Entry
 from tkFont import Font
@@ -42,9 +42,12 @@ def is_executable(path):
 
     return S_IEXEC & stat(path).st_mode
 
-
 def launch(name, args, aliases):
     fullname = aliases.get(name, name)
+
+    if " " in fullname:
+        fullname, xargs = fullname.split(" ", 1)
+        args = "%s %s" % (xargs, args)
 
     fullname = expanduser(fullname)
     if not exists(fullname):
