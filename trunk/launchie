@@ -78,7 +78,7 @@ def build_ui():
     ROOT.title("Launchie")
     ROOT.bind("<Escape>", quit)
     font = Font(family="Courier", size=40, weight="bold")
-    COMMAND = Entry(width=20, font=font)
+    COMMAND = Entry(ROOT, width=20, font=font)
     COMMAND.pack()
     COMMAND.bind("<Return>", lambda e: ROOT.quit())
 
