@@ -2,7 +2,7 @@
 "launchie" version 0.1.1 README
 ===============================
 :Author: Miki Tebeka <miki.tebeka@gmail.com>
-:Data: $Date$
+:Date: $Date$
 
 .. contents::
 
