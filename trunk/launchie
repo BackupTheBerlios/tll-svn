@@ -4,9 +4,10 @@
 __author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
 __version__ = "0.1.1"
 
-from Tkinter import Tk, Label, Entry
+from Tkinter import Tk, Label, Entry, BOTH
 from tkFont import Font
 from tkMessageBox import showerror
+from threading import Timer
 
 from os.path import exists, expanduser, join, isfile
 from os import environ, popen, stat, system
@@ -78,8 +79,8 @@ def build_ui():
     ROOT.title("Launchie")
     ROOT.bind("<Escape>", quit)
     font = Font(family="Courier", size=40, weight="bold")
-    COMMAND = Entry(ROOT, width=20, font=font)
-    COMMAND.pack()
+    COMMAND = Entry(width=20, font=font)
+    COMMAND.pack(fill=BOTH)
     COMMAND.bind("<Return>", lambda e: ROOT.quit())
 
 def show_ui():
@@ -87,7 +88,11 @@ def show_ui():
 
     USER_CANCEL = 0
     COMMAND.focus()
+
+    timer = Timer(30, quit, (None, ))
+    timer.start()
     ROOT.mainloop()
+    timer.cancel()
 
     return COMMAND.get().strip()
 
