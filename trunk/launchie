@@ -2,7 +2,7 @@
 '''Simple lanucher'''
 
 __author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 from Tkinter import Tk, Label, Entry, BOTH, Listbox, END
 from tkFont import Font
