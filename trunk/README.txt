@@ -1,5 +1,5 @@
 ===============================
-"launchie" version 0.1.1 README
+"launchie" version 0.2.0 README
 ===============================
 :Author: Miki Tebeka <miki.tebeka@gmail.com>
 :Date: $Date$
@@ -19,6 +19,9 @@ Just place `launchie` somewhere in your path and edit `~/.lauchierc`.
 Running
 =======
 Assign a keystroke to invoke it [#]_ and you're done.
+
+`lauchie` has a simple history, hit <UP-ARROW> or <DOWN-ARROW> to scroll the
+history.
 
 Configuration File
 ==================
