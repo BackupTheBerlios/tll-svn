@@ -1,34 +1,34 @@
-===============================
-"launchie" version 0.2.1 README
-===============================
+==========================
+"tll" version 0.2.1 README
+==========================
 :Author: Miki Tebeka <miki.tebeka@gmail.com>
 :Date: $Date$
 
 .. contents::
 
-What is "lanuchie"
-==================
-Launchie is a very minimal application launcher for Linux based systems.
+What is "tll"
+=============
+tll is a very minimal application launcher for Linux based systems.
 
-If you are on Mac try QuickSilver_, on Windows try SlickRun_.
+If you are on Mac try QuickSilver_, on Windows try Launchy_ or SlickRun_.
 
 Installation
 ============
-Just place `launchie` somewhere in your path and edit `~/.lauchierc`.
+Just place `tll` somewhere in your path and edit `~/.tllrc`.
 
 Running
 =======
 Assign a keystroke to invoke it [#]_ and you're done.
 
-`lauchie` has a simple history, hit <UP-ARROW> or <DOWN-ARROW> to scroll the
+`tll` has a simple history, hit <UP-ARROW> or <DOWN-ARROW> to scroll the
 history.
 
 Configuration File
 ==================
-`$HOME/.lauchierc` has the following syntax:
+`$HOME/.tllrc` has the following syntax:
 ::
     
-    # Launchie Aliases
+    # tll Aliases
 
     www = firefox
     mail = thunderbird
@@ -43,6 +43,7 @@ See http://developer.berlios.de/projects/tll/.
 
 .. _QuickSilver: http://quicksilver.blacktree.com/
 .. _SlickRun: http://www.bayden.com/SlickRun/
+.. _Launchy: http://www.launchy.net/
 .. [#] I map <CTRL-SHIFT-K> using "Settings->Keyboard Settings->Shortcuts" in
        XFCE_.
 .. _XFCE: http://www.xfce.org

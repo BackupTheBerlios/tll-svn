@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Simple lanucher'''
+'''Simple launcher'''
 
 __author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
 __version__ = "0.2.1"
@@ -28,7 +28,7 @@ def config_file(base_file, env_key):
 
 
 def load_aliases():
-    rcfile = config_file(".launchierc", "LAUNCHIERC")
+    rcfile = config_file(".tllrc", "TLLRC")
 
     if (not rcfile) or (not isfile(rcfile)):
         return {}
@@ -44,7 +44,7 @@ def load_aliases():
 
     return aliases
 
-histnames = (".launchie_history", "LAUNCHIE_HISTORY")
+histnames = (".tll_history", "TLL_HISTORY")
 def load_history():
     global HISTORY
 
@@ -121,7 +121,7 @@ def build_ui():
     global ROOT, COMMAND
 
     ROOT = Tk()
-    ROOT.title("Launchie")
+    ROOT.title("TLL")
     ROOT.bind("<Escape>", quit)
     font = Font(family="Courier", size=40, weight="bold")
     COMMAND = Entry(width=20, font=font)
@@ -162,7 +162,7 @@ def main(argv=None):
     from optparse import OptionParser
 
     parser = OptionParser(usage="usage: %prog", 
-            version="launchie %s" % __version__)
+            version="tll %s" % __version__)
 
     opts, args = parser.parse_args(argv[1:])
     if len(args) != 0:
@@ -181,7 +181,7 @@ def main(argv=None):
                 raise SystemExit
 
             if not command:
-                showerror("Launchie Error", "Please enter *something*")
+                showerror("TLL Error", "Please enter *something*")
                 continue
 
             if " " in command:
@@ -193,7 +193,7 @@ def main(argv=None):
             save_history()
             break
         except ValueError:
-            showerror("Lanuchie Error", "Can't launch %s" % command)
+            showerror("TLL Error", "Can't launch %s" % command)
 
 if __name__ == "__main__":
     main()
