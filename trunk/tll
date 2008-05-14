@@ -44,6 +44,14 @@ def load_aliases():
 
     return aliases
 
+def unique(items):
+    seen = set()
+    for item in items:
+        if item in seen:
+            continue
+        seen.add(item)
+        yield item
+
 histnames = (".tll_history", "TLL_HISTORY")
 def load_history():
     global HISTORY
@@ -54,6 +62,7 @@ def load_history():
         return []
 
     HISTORY = filter(None, map(strip, open(histfile)))
+    history = list(unique(HISTORY))
 
 def save_history():
     histfile = config_file(*histnames)
@@ -61,12 +70,12 @@ def save_history():
         return
 
     fo = open(histfile, "wt")
-    for item in HISTORY:
+    for item in unique(HISTORY):
         print >> fo, item
     fo.close()
 
 def update_history(command, args):
-    newline = "%s %s" % (command, args)
+    newline = ("%s %s" % (command, args)).strip()
     for lnum, line in enumerate(HISTORY):
         if line == newline:
             del HISTORY[lnum]
