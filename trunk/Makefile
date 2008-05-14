@@ -19,6 +19,9 @@ clean: deldist
 	(test -f README.html && rm README.html) || true
 	(test -f $(DISTFILE) && rm $(DISTFILE)) || true
 
+push:
+	scp $(DISTFILE) tebeka@shell.berlios.de:/home/groups/ftp/pub/tll
+
 fresh: clean all
 
-.PHONY: all dist clean fresh
+.PHONY: all dist clean fresh deldist push
