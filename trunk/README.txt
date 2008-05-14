@@ -44,9 +44,10 @@ See http://developer.berlios.de/projects/tll/.
 .. _QuickSilver: http://quicksilver.blacktree.com/
 .. _SlickRun: http://www.bayden.com/SlickRun/
 .. _Launchy: http://www.launchy.net/
-.. [#] I map <CTRL-SHIFT-K> using "Settings->Keyboard Settings->Shortcuts" in
-       XFCE_.
+.. [#] "Settings->Keyboard Settings->Shortcuts" in XFCE_, see here_ for GNOME_.
 .. _XFCE: http://www.xfce.org
+.. _here: http://www.cyberciti.biz/faq/howto-create-keyboard-shortcuts-in-gnome/
+.. _GNOME: http://www.gnome.org/
 
 
 .. comment: vim:ft=rst spell
