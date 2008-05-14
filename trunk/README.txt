@@ -1,5 +1,5 @@
 ===============================
-"launchie" version 0.2.0 README
+"launchie" version 0.2.1 README
 ===============================
 :Author: Miki Tebeka <miki.tebeka@gmail.com>
 :Date: $Date$

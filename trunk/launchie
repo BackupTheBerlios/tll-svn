@@ -2,7 +2,7 @@
 '''Simple lanucher'''
 
 __author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 from Tkinter import Tk, Label, Entry, BOTH, Listbox, END
 from tkFont import Font
@@ -132,6 +132,7 @@ def build_ui():
 
     if HISTORY:
         COMMAND.insert(0, HISTORY[0])
+        COMMAND.selection_range(0, END)
 
 def show_ui():
     global USER_CANCEL
