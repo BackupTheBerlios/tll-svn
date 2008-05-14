@@ -4,7 +4,7 @@
 __author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
 __version__ = "0.1.1"
 
-from Tkinter import Tk, Label, Entry, BOTH
+from Tkinter import Tk, Label, Entry, BOTH, Listbox, END
 from tkFont import Font
 from tkMessageBox import showerror
 from threading import Timer
@@ -14,14 +14,21 @@ from os import environ, popen, stat, system
 from stat import S_IEXEC
 from string import strip
 
-def load_aliases():
-    env_key = "LAUNCHIERC"
-    rcfile = ""
-    
+HISTORY = []
+HISTORY_INDEX = 0
+
+def config_file(base_file, env_key):
+    filename = ""
     if env_key in environ:
-        rcfile = environ[env_key]
+        return environ[env_key]
     elif "HOME" in environ:
-        rcfile = join(environ["HOME"], ".launchierc")
+        return join(environ["HOME"], base_file)
+
+    return ""
+
+
+def load_aliases():
+    rcfile = config_file(".launchierc", "LAUNCHIERC")
 
     if (not rcfile) or (not isfile(rcfile)):
         return {}
@@ -36,6 +43,34 @@ def load_aliases():
         aliases[alias] = target
 
     return aliases
+
+histnames = (".launchie_history", "LAUNCHIE_HISTORY")
+def load_history():
+    global HISTORY
+
+    histfile = config_file(*histnames)
+
+    if (not histfile) or (not isfile(histfile)):
+        return []
+
+    HISTORY = filter(None, map(strip, open(histfile)))
+
+def save_history():
+    histfile = config_file(*histnames)
+    if not histfile:
+        return
+
+    fo = open(histfile, "wt")
+    for item in HISTORY:
+        print >> fo, item
+    fo.close()
+
+def update_history(command, args):
+    newline = "%s %s" % (command, args)
+    for lnum, line in enumerate(HISTORY):
+        if line == newline:
+            del HISTORY[lnum]
+    HISTORY.insert(0, newline)
 
 def is_executable(path):
     if not isfile(path):
@@ -72,6 +107,16 @@ def quit(event):
     USER_CANCEL = 1
     ROOT.quit()
 
+def move(step):
+    global HISTORY_INDEX
+
+    if not HISTORY:
+        return
+
+    HISTORY_INDEX = (HISTORY_INDEX + step) % len(HISTORY)
+    COMMAND.delete(0, END)
+    COMMAND.insert(0, HISTORY[HISTORY_INDEX])
+
 def build_ui():
     global ROOT, COMMAND
 
@@ -82,6 +127,11 @@ def build_ui():
     COMMAND = Entry(width=20, font=font)
     COMMAND.pack(fill=BOTH)
     COMMAND.bind("<Return>", lambda e: ROOT.quit())
+    COMMAND.bind("<Up>", lambda e: move(-1))
+    COMMAND.bind("<Down>", lambda e: move(1))
+
+    if HISTORY:
+        COMMAND.insert(0, HISTORY[0])
 
 def show_ui():
     global USER_CANCEL
@@ -103,7 +153,6 @@ def set_user_path():
     new_path = "%s:%s" % (join(environ["HOME"], "bin"), environ["PATH"])
     environ["PATH"] = new_path
 
-
 def main(argv=None):
     if argv is None:
         import sys
@@ -120,9 +169,10 @@ def main(argv=None):
 
 
     aliases = load_aliases()
+    load_history()
     set_user_path()
-    build_ui()
 
+    build_ui()
     while 1:
         try:
             command = show_ui()
@@ -138,6 +188,8 @@ def main(argv=None):
             else:
                 args = ""
             launch(command, args, aliases)
+            update_history(command, args)
+            save_history()
             break
         except ValueError:
             showerror("Lanuchie Error", "Can't launch %s" % command)
