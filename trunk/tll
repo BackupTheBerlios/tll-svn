@@ -2,9 +2,9 @@
 '''Simple launcher'''
 
 __author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
-__version__ = "0.2.1"
+__version__ = "0.3.0"
 
-from Tkinter import Tk, Label, Entry, BOTH, Listbox, END
+import Tkinter as tk
 from tkFont import Font
 from tkMessageBox import showerror
 from threading import Timer
@@ -14,8 +14,13 @@ from os import environ, popen, stat, system
 from stat import S_IEXEC
 from string import strip
 
-HISTORY = []
-HISTORY_INDEX = 0
+def unique(items):
+    seen = set()
+    for item in items:
+        if item in seen:
+            continue
+        seen.add(item)
+        yield item
 
 def config_file(base_file, env_key):
     filename = ""
@@ -26,6 +31,48 @@ def config_file(base_file, env_key):
 
     return ""
 
+class History:
+    histnames = (".tll_history", "TLL_HISTORY")
+
+    def __init__(self, history=None):
+        self.history = list(history) if history else []
+        self.index = 0
+
+    def with_config_file(self, func, mode):
+        histfile = config_file(*self.histnames)
+        if (not histfile) or ((mode[0] == "r") and (not isfile(histfile))):
+            return
+
+        try:
+            fo = open(histfile, mode)
+            return func(fo)
+        finally:
+            fo.close()
+
+    def load(self):
+        def _load(fo):
+            history = filter(None, map(strip, fo))
+            history = list(unique(history))
+
+            self.history = history
+
+        self.with_config_file(_load, "r")
+
+    def save(self):
+        def _save(fo):
+            for item in unique(self.history):
+                print >> fo, item
+            fo.close()
+
+        self.with_config_file(_save, "wt")
+
+    def update(self, newline):
+        old = filter(lambda line: line != newline, self.history)
+        self.history = [newline] + old
+
+    def next(self, step):
+        self.index = (self.index + step) % len(self.history)
+        return self.history[self.index]
 
 def load_aliases():
     rcfile = config_file(".tllrc", "TLLRC")
@@ -43,43 +90,6 @@ def load_aliases():
         aliases[alias] = target
 
     return aliases
-
-def unique(items):
-    seen = set()
-    for item in items:
-        if item in seen:
-            continue
-        seen.add(item)
-        yield item
-
-histnames = (".tll_history", "TLL_HISTORY")
-def load_history():
-    global HISTORY
-
-    histfile = config_file(*histnames)
-
-    if (not histfile) or (not isfile(histfile)):
-        return []
-
-    HISTORY = filter(None, map(strip, open(histfile)))
-    history = list(unique(HISTORY))
-
-def save_history():
-    histfile = config_file(*histnames)
-    if not histfile:
-        return
-
-    fo = open(histfile, "wt")
-    for item in unique(HISTORY):
-        print >> fo, item
-    fo.close()
-
-def update_history(command, args):
-    newline = ("%s %s" % (command, args)).strip()
-    for lnum, line in enumerate(HISTORY):
-        if line == newline:
-            del HISTORY[lnum]
-    HISTORY.insert(0, newline)
 
 def is_executable(path):
     if not isfile(path):
@@ -105,55 +115,35 @@ def launch(name, args, aliases):
     else:
         system("start \"%s\"" % fullname)
 
+class TLL:
+    def __init__(self, history):
+        self.user_cancel = 0
+        self.history = history
+        self.root = root = tk.Tk()
+        root.title("TLL")
+        root.bind("<Escape>", self.quit)
+        font = Font(family="Courier", size=40, weight="bold")
+        self.command = cmd = tk.Entry(root, width=20, font=font)
+        cmd.pack(fill=tk.BOTH)
+        cmd.bind("<Return>", lambda e: root.quit())
+        cmd.bind("<Up>", lambda e: self.move(-1))
+        cmd.bind("<Down>", lambda e: self.move(1))
 
-USER_CANCEL = 0
-ROOT = None
-COMMAND = None
+    def run(self):
+        self.command.focus()
+        self.root.mainloop()
 
-def quit(event):
-    global USER_CANCEL
+    def quit(self, event):
+        self.user_cancel = 1
+        self.root.quit()
 
-    USER_CANCEL = 1
-    ROOT.quit()
+    def move(self, step):
+        line = self.history.next(step)
+        self.command.delete(0, tk.END)
+        self.command.insert(0, line)
 
-def move(step):
-    global HISTORY_INDEX
-
-    if not HISTORY:
-        return
-
-    HISTORY_INDEX = (HISTORY_INDEX + step) % len(HISTORY)
-    COMMAND.delete(0, END)
-    COMMAND.insert(0, HISTORY[HISTORY_INDEX])
-
-def build_ui():
-    global ROOT, COMMAND
-
-    ROOT = Tk()
-    ROOT.title("TLL")
-    ROOT.bind("<Escape>", quit)
-    font = Font(family="Courier", size=40, weight="bold")
-    COMMAND = Entry(width=20, font=font)
-    COMMAND.pack(fill=BOTH)
-    COMMAND.bind("<Return>", lambda e: ROOT.quit())
-    COMMAND.bind("<Up>", lambda e: move(-1))
-    COMMAND.bind("<Down>", lambda e: move(1))
-
-    if HISTORY:
-        COMMAND.insert(0, HISTORY[0])
-
-def show_ui():
-    global USER_CANCEL
-
-    USER_CANCEL = 0
-    COMMAND.focus()
-
-    timer = Timer(30, quit, (None, ))
-    timer.start()
-    ROOT.mainloop()
-    timer.cancel()
-
-    return COMMAND.get().strip()
+    def get(self):
+        return self.command.get().strip()
 
 def set_user_path():
     if "HOME" not in environ:
@@ -176,29 +166,38 @@ def main(argv=None):
     if len(args) != 0:
         parser.error("wrong number of arguments") # Will exit
 
-
-    aliases = load_aliases()
-    load_history()
     set_user_path()
 
-    build_ui()
+    aliases = load_aliases()
+    history = History()
+    history.load()
+
     while 1:
         try:
-            command = show_ui()
-            if USER_CANCEL:
+            history.index = 0
+            ui = TLL(history)
+            # Quit after 30 seconds
+            timer = Timer(30, ui.quit, (None, ))
+            timer.start()
+            ui.run()
+            timer.cancel()
+
+            if ui.user_cancel:
                 raise SystemExit
 
+            command = ui.get()
             if not command:
                 showerror("TLL Error", "Please enter *something*")
                 continue
+
+            history.update(command)
+            history.save()
 
             if " " in command:
                 command, args = command.split(" ", 1)
             else:
                 args = ""
             launch(command, args, aliases)
-            update_history(command, args)
-            save_history()
             break
         except ValueError:
             showerror("TLL Error", "Can't launch %s" % command)

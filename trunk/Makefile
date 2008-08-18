@@ -1,4 +1,4 @@
-VERSION=`./tll --version | cut -d' ' -f2`
+VERSION=$(shell ./tll --version | cut -d' ' -f2)
 DISTDIR=tll-$(VERSION)
 DISTFILE=$(DISTDIR).tar.bz2
 
