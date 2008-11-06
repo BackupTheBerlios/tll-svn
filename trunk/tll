@@ -201,6 +201,7 @@ def main(argv=None):
             break
         except ValueError:
             showerror("TLL Error", "Can't launch %s" % command)
+            raise SystemExit
 
 if __name__ == "__main__":
     main()
